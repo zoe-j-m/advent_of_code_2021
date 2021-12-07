@@ -7,13 +7,20 @@ def input_as_string(filename: str) -> str:
         return f.read().rstrip("\n")
 
 
+def input_as_ints_from_single_line(filename: str) -> List[int]:
+    """returns the single line as a list of ints"""
+    return list(map(lambda x: int(x), input_as_string(filename).split(',')))
+
+
 def input_as_lines(filename: str) -> List[str]:
     """Return a list where each line in the input file is an element of the list"""
     return input_as_string(filename).split("\n")
 
 
+def line_as_int(line: str) -> int: int(line.rstrip('\n'))
+
+
 def input_as_ints(filename: str) -> List[int]:
     """Return a list where each line in the input file is an element of the list, converted into an integer"""
     lines = input_as_lines(filename)
-    line_as_int = lambda l: int(l.rstrip('\n'))
     return list(map(line_as_int, lines))

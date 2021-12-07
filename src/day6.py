@@ -28,7 +28,7 @@ def apply_days(day_count: int, days: Mapping[int, int]) -> Mapping[int, int]:
 
 
 if __name__ == '__main__':
-    data = list(map(lambda x: int(x), file_handling.input_as_string('data/day6').split(',')))
+    data = file_handling.input_as_ints_from_single_line('data/day6')
     start_days = Counter(data)
     end_days = apply_days(80, start_days)
     print(total_fish(end_days))
