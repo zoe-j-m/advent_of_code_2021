@@ -25,8 +25,7 @@ def derive_encoder(observed_values: List[Set[str]]) -> Dict[str, str]:
     known_values['bd'] = set([bd_val for bd_val in four_value if bd_val not in known_values['cf']])
 
     length_five_values = get_all_of_length(5, observed_values)
-    chars_in_all_length_five = list(
-        set(length_five_values[0]) & set(length_five_values[1]) & set(length_five_values[2]))
+    chars_in_all_length_five = length_five_values[0] & length_five_values[1] & length_five_values[2]
     single_values['g'] = [g_val for g_val in chars_in_all_length_five if
                           g_val != single_values['a'] and g_val not in known_values['bd']][0]
     single_values['d'] = [d_val for d_val in chars_in_all_length_five if
