@@ -1,20 +1,20 @@
 from src.utilities import file_handling
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Set
 
 
-def get_all_of_length(length: int, observed_values: List[List[str]]) -> List[List[str]]:
+def get_all_of_length(length: int, observed_values: List[Set[str]]) -> List[Set[str]]:
     return [observed for observed in observed_values if len(observed) == length]
 
 
-def extract_data_from_line(line: str) -> Tuple[List[List[str]], List[List[str]]]:
+def extract_data_from_line(line: str) -> Tuple[List[Set[str]], List[Set[str]]]:
     observed_and_output = line.split('|')
-    return ([list(sorted(observed)) for observed in observed_and_output[0].split()],
-            [list(sorted(output_digit)) for output_digit in observed_and_output[1].split()])
+    return ([set(observed) for observed in observed_and_output[0].split()],
+            [set(output_digit) for output_digit in observed_and_output[1].split()])
 
 
-def decode_values(observed_values: List[List[str]]) -> Dict[str, str]:
+def decode_values(observed_values: List[Set[str]]) -> Dict[str, str]:
     single_values: Dict[str, str] = {}
-    known_values: Dict[str, List[str]] = {}
+    known_values: Dict[str, Set[str]] = {}
 
     known_values['cf'] = get_all_of_length(2, observed_values)[0]
 
@@ -22,7 +22,7 @@ def decode_values(observed_values: List[List[str]]) -> Dict[str, str]:
     single_values['a'] = [a_val for a_val in seven_value if a_val not in known_values['cf']][0]
 
     four_value = get_all_of_length(4, observed_values)[0]
-    known_values['bd'] = [bd_val for bd_val in four_value if bd_val not in known_values['cf']]
+    known_values['bd'] = set([bd_val for bd_val in four_value if bd_val not in known_values['cf']])
 
     length_five_values = get_all_of_length(5, observed_values)
     chars_in_all_length_five = list(
@@ -46,7 +46,7 @@ def decode_values(observed_values: List[List[str]]) -> Dict[str, str]:
     return single_values
 
 
-def decoded_value_to_intstr(encoded_value: List[str], code: Dict[str, str]) -> str:
+def decoded_value_to_intstr(encoded_value: Set[str], code: Dict[str, str]) -> str:
     decoder: Dict[str, str] = {coded: uncoded for uncoded, coded in code.items()}
     actuals = {
         'cf': '1',
@@ -63,12 +63,12 @@ def decoded_value_to_intstr(encoded_value: List[str], code: Dict[str, str]) -> s
     return actuals[''.join(list(sorted([decoder[coded_val] for coded_val in encoded_value])))]
 
 
-def decode(observed_values: List[List[str]], output_values: List[List[str]]) -> int:
+def decode(observed_values: List[Set[str]], output_values: List[Set[str]]) -> int:
     coder = decode_values(observed_values)
     return int(''.join([decoded_value_to_intstr(output_val, coder) for output_val in output_values]))
 
 
-def one_four_seven_eight_count(output_values: List[List[str]]) -> int:
+def one_four_seven_eight_count(output_values: List[Set[str]]) -> int:
     one_four_seven_eight = [output_value for output_value in output_values if len(output_value) in [2, 3, 4, 7]]
     return len(one_four_seven_eight)
 
