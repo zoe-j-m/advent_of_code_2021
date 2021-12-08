@@ -12,7 +12,7 @@ def extract_data_from_line(line: str) -> Tuple[List[Set[str]], List[Set[str]]]:
             [set(output_digit) for output_digit in observed_and_output[1].split()])
 
 
-def decode_values(observed_values: List[Set[str]]) -> Dict[str, str]:
+def derive_encoder(observed_values: List[Set[str]]) -> Dict[str, str]:
     single_values: Dict[str, str] = {}
     known_values: Dict[str, Set[str]] = {}
 
@@ -46,8 +46,8 @@ def decode_values(observed_values: List[Set[str]]) -> Dict[str, str]:
     return single_values
 
 
-def decoded_value_to_intstr(encoded_value: Set[str], code: Dict[str, str]) -> str:
-    decoder: Dict[str, str] = {coded: uncoded for uncoded, coded in code.items()}
+def decode_to_intstr(encoded_value: Set[str], encoder: Dict[str, str]) -> str:
+    decoder: Dict[str, str] = {coded: uncoded for uncoded, coded in encoder.items()}
     actuals = {
         'cf': '1',
         'acf': '7',
@@ -64,8 +64,8 @@ def decoded_value_to_intstr(encoded_value: Set[str], code: Dict[str, str]) -> st
 
 
 def decode(observed_values: List[Set[str]], output_values: List[Set[str]]) -> int:
-    coder = decode_values(observed_values)
-    return int(''.join([decoded_value_to_intstr(output_val, coder) for output_val in output_values]))
+    coder = derive_encoder(observed_values)
+    return int(''.join([decode_to_intstr(output_val, coder) for output_val in output_values]))
 
 
 def one_four_seven_eight_count(output_values: List[Set[str]]) -> int:
